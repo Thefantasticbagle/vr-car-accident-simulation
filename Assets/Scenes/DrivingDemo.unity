@@ -6586,7 +6586,7 @@ GameObject:
   - component: {fileID: 1836135562}
   - component: {fileID: 1836135561}
   m_Layer: 0
-  m_Name: DrivingDemoManager
+  m_Name: SceneStateManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
