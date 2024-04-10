@@ -16,6 +16,7 @@ public class DrivingDemoManager : MonoBehaviour
     public SplineAnimate CarAnimator;
     public GameObject    XROrigin;
     public GameObject    PlayerLocomotionSystem;
+    public GameObject    Smarthphone;
 
     // Start is called before the first frame update
     void Start()
@@ -106,9 +107,21 @@ public class DrivingDemoManager : MonoBehaviour
         yield return null;
     }
 
+    /// <summary>
+    /// "Calls" the emergency services.
+    /// This function is activated by the button-component of a spatial manager when "Call an ambulance" is pressed.
+    /// </summary>
+    public void CallEmergencyServices()
+    {
+        // (For now, simply disable the phone and close the thread...)
+        Smarthphone.SetActive(false);
+        SceneState.CompleteItem("CallEmergencyServices");
+    }
     IEnumerator CallEmergencyServicesThread()
     {
-        yield return null;
+        // (For now, wait for CallEmergencyService() to close the thread for us)
+        while (SceneState.unfinishedItems.Contains("CallEmergencyServices"))
+            yield return null;
     }
 
     IEnumerator DisableIncidentCarThread()
