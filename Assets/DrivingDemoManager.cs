@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 using Interpolators = UnityEngine.Splines.Interpolators;
+using Unity.Services.Analytics;
 
 public class DrivingDemoManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class DrivingDemoManager : MonoBehaviour
     void Start()
     {
         InitDefaultStartingState();
+        StartCoroutine( GameLoop() );
     }
 
     /// <summary>
@@ -27,45 +29,97 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     void InitDefaultStartingState()
     {
-        SceneState.allSteps = new List<Step>
+        // Set up all steps, as well as their ordering
+        SceneState.allItems = new Dictionary<string, ProtocolItem>
         {
-            new Step 
+            { "HazardLights", new ProtocolItem
             (
-                "HazardLights",
                 1,
                 "Turn on hazard lights"
-            ),
-            new Step 
+            )},
+            { "EmergencyTriangle", new ProtocolItem
             (
-                "ReflectiveVest",
-                2,
-                "Retrieve and wear reflective vest"
-            ),            
-            new Step 
-            (
-                "EmergencyTriangle",
                 3,
                 "Place emergency triangle 150-200m away"
-            ),
-            new Step 
+            )},
+            { "CallEmergencyServices", new ProtocolItem
             (
-                "CallEmergencyServices",
                 4,
                 "Call the emergency services"
-            ),
-            new Step
+            )},
+            { "DisableIncidentCar", new ProtocolItem
             (
-                "DisableIncidentCar",
                 5,
                 "Disable the incident car"
-            ),
-            new Step
+            )},
+            { "HMS", new ProtocolItem
             (
-                "HMS",
                 6,
                 "Give medical attention to the person"
-            ),
+            )}
         };
+
+        // Mark all items as unfinished
+        SceneState.unfinishedItems = new List<string> { };
+        foreach (var it in SceneState.allItems.Keys)
+            SceneState.unfinishedItems.Add( it );
+    }
+
+    /// <summary>
+    /// The game loop.
+    /// Starts threads and checks for end-of-game condition.
+    /// </summary>
+    IEnumerator GameLoop()
+    {
+        // Wait for car driving to finish
+        yield return StartCoroutine(CarThread());
+
+        // Start threads
+        // Each thread runs independently and writes to the SceneState in order to communicate
+        StartCoroutine(HazardLightsThread());
+        StartCoroutine(ReflectiveVestThread());
+        StartCoroutine(EmergencyTriangleThread());
+        StartCoroutine(CallEmergencyServicesThread());
+        StartCoroutine(DisableIncidentCarThread());
+        StartCoroutine(HMSThread());
+
+        // Wait for end-of-game condition
+        while (!SceneState.finishedItems.Contains("HMS")) // For now, the 6th step (HMS) ends the games
+            yield return null;
+
+        // End of game.
+        Debug.Log("Game complete!");
+    }
+
+    IEnumerator HazardLightsThread()
+    {
+        yield return null;
+    }
+
+    IEnumerator ReflectiveVestThread()
+    {
+        yield return null;
+    }
+
+    IEnumerator EmergencyTriangleThread()
+    {
+        yield return null;
+    }
+
+    IEnumerator CallEmergencyServicesThread()
+    {
+        yield return null;
+    }
+
+    IEnumerator DisableIncidentCarThread()
+    {
+        yield return null;
+    }
+
+    IEnumerator HMSThread()
+    {
+        yield return new WaitForSeconds(5);
+        SceneState.CompleteItem("HMS");
     }
 
     /// <summary>
