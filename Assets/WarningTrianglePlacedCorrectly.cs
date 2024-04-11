@@ -20,7 +20,7 @@ public class WarningTrianglePlacedCorrectly : MonoBehaviour
     void OnTriggerEnter(Collider c){
         if(c.gameObject == legalPlacementRegion){
             Debug.Log("Warning triangle is in an appropriate region");
-            
+            SceneState.CompleteItem("EmergencyTriangle");
         }
     }
 
