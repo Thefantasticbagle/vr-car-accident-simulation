@@ -11,12 +11,13 @@ using Interpolators = UnityEngine.Splines.Interpolators;
 using Unity.Services.Analytics;
 
 public class DrivingDemoManager : MonoBehaviour
-{
+{   
     public GameObject    Car;
     public SplineAnimate CarAnimator;
     public GameObject    XROrigin;
     public GameObject    PlayerLocomotionSystem;
     public GameObject    Smarthphone;
+    public GlowOnHover   HazardLightsButtonGlowScript;
 
     // Start is called before the first frame update
     void Start()
@@ -92,9 +93,23 @@ public class DrivingDemoManager : MonoBehaviour
         Debug.Log("Game complete!");
     }
 
+    /// <summary>
+    /// Enables the hazard lights of the player car.
+    /// </summary>
+    public void EnableHazardLights()
+    {
+        // Early exit conditions
+        if (SceneState.finishedItems.Contains("HazardLights")) return;
+
+        // (For now, simply make the button glow red and make it uninteractible)
+        HazardLightsButtonGlowScript.StartPulsingRed();
+        SceneState.CompleteItem("HazardLights");
+    }
     IEnumerator HazardLightsThread()
     {
-        yield return null;
+        // (For now, wait for EnableHazardLights() to close the thread for us)
+        while (SceneState.unfinishedItems.Contains("HazardLights"))
+            yield return null;
     }
 
     IEnumerator ReflectiveVestThread()
@@ -127,7 +142,7 @@ public class DrivingDemoManager : MonoBehaviour
     IEnumerator DisableIncidentCarThread()
     {
         yield return null;
-    }
+    }   
 
     IEnumerator HMSThread()
     {
