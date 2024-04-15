@@ -7,9 +7,9 @@ using UnityEngine;
  */
 public struct ProtocolItem
 {
-    int         intentedOrder;
-    int         completedOrder;
-    string      description;
+    public int         intentedOrder;
+    public int         completedOrder;
+    public string      description;
 
     public ProtocolItem(int intentedOrder, string description)
     {

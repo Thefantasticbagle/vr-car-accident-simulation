@@ -9,6 +9,8 @@ using UnityEngine;
 using UnityEngine.Splines;
 using Interpolators = UnityEngine.Splines.Interpolators;
 using Unity.Services.Analytics;
+using UnityEngine.UI;
+using TMPro;
 
 public class DrivingDemoManager : MonoBehaviour
 {
@@ -17,11 +19,18 @@ public class DrivingDemoManager : MonoBehaviour
     public GameObject    XROrigin;
     public GameObject    PlayerLocomotionSystem;
 
+    public TMP_Text     popupTextField;
+
+    public GameObject    popupObj;
+
     // Start is called before the first frame update
     void Start()
     {
         InitDefaultStartingState();
         StartCoroutine( GameLoop() );
+
+        popupObj.SetActive(false);
+
     }
 
     /// <summary>
@@ -65,6 +74,41 @@ public class DrivingDemoManager : MonoBehaviour
             SceneState.unfinishedItems.Add( it );
     }
 
+
+    IEnumerator ListenForProtocolItemCompletion()
+    {
+        int oldCompletedCount = SceneState.finishedItems.Count;
+
+        while(true){
+            int newCompletedCount = SceneState.finishedItems.Count;
+            if(oldCompletedCount != newCompletedCount)
+            {
+                string lastItemName = SceneState.finishedItems[^1];
+                ProtocolItem lastItem = SceneState.allItems[lastItemName];
+
+                Debug.Log("COMPLETED NEW OBJECTIVE: " + lastItemName + " " + lastItem.description);
+
+                
+                // Set popup-text and show it
+                popupTextField.text = "Completed: " + lastItem.description;
+                
+                popupObj.SetActive(true);
+                yield return (new WaitForSeconds(6));
+                popupObj.SetActive(false);
+                /**                
+                */
+
+                oldCompletedCount = SceneState.finishedItems.Count;
+            } else {
+                oldCompletedCount = SceneState.finishedItems.Count;
+                yield return (new WaitForSeconds(2));
+            }
+
+        }
+
+    }
+
+
     /// <summary>
     /// The game loop.
     /// Starts threads and checks for end-of-game condition.
@@ -82,6 +126,8 @@ public class DrivingDemoManager : MonoBehaviour
         StartCoroutine(CallEmergencyServicesThread());
         StartCoroutine(DisableIncidentCarThread());
         StartCoroutine(HMSThread());
+
+        StartCoroutine(ListenForProtocolItemCompletion());
 
         // Wait for end-of-game condition
         while (!SceneState.finishedItems.Contains("HMS")) // For now, the 6th step (HMS) ends the games

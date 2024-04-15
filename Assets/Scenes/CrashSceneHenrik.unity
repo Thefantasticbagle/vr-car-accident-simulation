@@ -775,11 +775,11 @@ Transform:
   m_GameObject: {fileID: 133684043}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.16868354, z: -0, w: 0.98567027}
-  m_LocalPosition: {x: -45.08, y: 2.18, z: -30.98}
-  m_LocalScale: {x: 22.158424, y: 23.587116, z: 60.210686}
+  m_LocalPosition: {x: -21.330002, y: 10.703341, z: 13.389999}
+  m_LocalScale: {x: 22.158424, y: 23.587116, z: 60.21069}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 886092124}
   m_LocalEulerAnglesHint: {x: 0, y: 19.423, z: 0}
 --- !u!1001 &143382229
 PrefabInstance:
@@ -1003,38 +1003,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4339898394216490, guid: 7d39a68237432ea41ae92c75eb21dcf4, type: 3}
   m_PrefabInstance: {fileID: 214527835}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &225165905
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 225165906}
-  m_Layer: 0
-  m_Name: PopupHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &225165906
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225165905}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 564449072}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &292041995
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1872,8 +1840,8 @@ GameObject:
   - component: {fileID: 564449075}
   - component: {fileID: 564449074}
   - component: {fileID: 564449073}
-  m_Layer: 0
-  m_Name: TextCanvas
+  m_Layer: 5
+  m_Name: PopupObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1892,7 +1860,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1433376762}
-  m_Father: {fileID: 225165906}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3133,6 +3101,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 57369255}
+  - {fileID: 133684047}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &913813098
@@ -4214,8 +4183,8 @@ GameObject:
   - component: {fileID: 1168726401}
   - component: {fileID: 1168726403}
   - component: {fileID: 1168726402}
-  m_Layer: 0
-  m_Name: PopupText
+  m_Layer: 5
+  m_Name: PopupTextField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5361,8 +5330,8 @@ GameObject:
   - component: {fileID: 1433376762}
   - component: {fileID: 1433376764}
   - component: {fileID: 1433376763}
-  m_Layer: 0
-  m_Name: Image
+  m_Layer: 5
+  m_Name: PopupBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5580,7 +5549,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.879999
+      value: -73
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5588,23 +5557,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -28.93
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5941017
+      value: 0.8442908
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 1.0332132e-16
+      value: 0.000000019122826
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.80438995
+      value: 0.53588533
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 7.631048e-17
+      value: 0.000000030128138
       objectReference: {fileID: 0}
     - target: {fileID: 4352964966052378, guid: 8258fdccd226b584b8dc1c7ac1652db0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7457,6 +7426,8 @@ MonoBehaviour:
   CarAnimator: {fileID: 1483755534}
   XROrigin: {fileID: 1825262783}
   PlayerLocomotionSystem: {fileID: 338540514}
+  popupTextField: {fileID: 1168726402}
+  popupObj: {fileID: 564449071}
 --- !u!4 &1836135562
 Transform:
   m_ObjectHideFlags: 0
@@ -8660,5 +8631,4 @@ SceneRoots:
   - {fileID: 1836135562}
   - {fileID: 776444971}
   - {fileID: 886092124}
-  - {fileID: 133684047}
-  - {fileID: 225165906}
+  - {fileID: 564449072}
