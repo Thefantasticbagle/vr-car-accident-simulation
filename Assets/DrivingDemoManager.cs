@@ -117,8 +117,14 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     IEnumerator GameLoop()
     {
+        // Place player within their car
+        //XROrigin.transform.parent = Car.transform;
+        //XROrigin.transform.position = new Vector3(-0.3f, -0.417f, 0.11f);
+        //XROrigin.transform.rotation = Quaternion.Euler(new Vector3(0.0f, -1.314f, 0.0f));
+
         // Wait for car driving to finish
-        yield return StartCoroutine(CarThread());
+        //yield return StartCoroutine(CarThread());
+        yield return null;
 
         // Start threads
         // Each thread runs independently and writes to the SceneState in order to communicate
