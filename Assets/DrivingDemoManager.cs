@@ -25,6 +25,14 @@ public class DrivingDemoManager : MonoBehaviour
 
     public GameObject    popupObj;
 
+    public AudioSource soundFXSource;
+
+    public AudioClip soundFXClip;
+
+    public TMP_Text timerText;
+    float elapsedTime;
+    float tempTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +41,16 @@ public class DrivingDemoManager : MonoBehaviour
 
         popupObj.SetActive(false);
 
+    }
+
+    void Update()
+    {
+        // Update timer
+        elapsedTime += Time.deltaTime;
+        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        int minutes = Mathf.FloorToInt(elapsedTime / 60);
+        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        
     }
 
     /// <summary>
@@ -95,6 +113,7 @@ public class DrivingDemoManager : MonoBehaviour
                 popupTextField.text = "Completed: " + lastItem.description;
                 
                 popupObj.SetActive(true);
+                soundFXSource.PlayOneShot(soundFXClip);
                 yield return (new WaitForSeconds(6));
                 popupObj.SetActive(false);
                 /**                
@@ -103,7 +122,7 @@ public class DrivingDemoManager : MonoBehaviour
                 oldCompletedCount = SceneState.finishedItems.Count;
             } else {
                 oldCompletedCount = SceneState.finishedItems.Count;
-                yield return (new WaitForSeconds(2));
+                yield return (new WaitForSeconds(1));
             }
 
         }
