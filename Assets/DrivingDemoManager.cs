@@ -142,10 +142,11 @@ public class DrivingDemoManager : MonoBehaviour
     IEnumerator GameLoop()
     {
         // Place player within their car
-        // TODO: FIX THIS
-        XROrigin.transform.parent = Car.transform;
-        XROrigin.transform.position = new Vector3(-0.3f, -0.417f, 0.11f);
-        XROrigin.transform.rotation = Quaternion.Euler(new Vector3(0.0f, -1.314f, 0.0f));
+        XROrigin.transform.SetParent(Car.transform, false);
+        XROrigin.transform.position = new Vector3(0, 0, 0);
+        XROrigin.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        XROrigin.transform.localPosition = new Vector3(-0.3f, -0.417f, 0.11f);
+        XROrigin.transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -1.314f, 0.0f));
 
         // Wait for car driving to finish
         yield return StartCoroutine(CarThread());
@@ -241,7 +242,7 @@ public class DrivingDemoManager : MonoBehaviour
 
         // Once the car has arrived, teleport player out of car and enable movement again 
         PlayerLocomotionSystem.SetActive(true);
-        XROrigin.transform.parent = null;
+        XROrigin.transform.SetParent(null);
         Vector3 carOffset = Car.transform.localToWorldMatrix * new Vector4(-1.3f, -0.5f, 0.2f, 0f);
         XROrigin.transform.position = Car.transform.position + carOffset;
     }
