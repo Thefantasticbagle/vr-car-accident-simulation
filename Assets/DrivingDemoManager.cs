@@ -11,6 +11,7 @@ using Interpolators = UnityEngine.Splines.Interpolators;
 using Unity.Services.Analytics;
 using UnityEngine.UI;
 using TMPro;
+using XRSimpleInteractable;
 
 public class DrivingDemoManager : MonoBehaviour
 {   
@@ -33,11 +34,32 @@ public class DrivingDemoManager : MonoBehaviour
     float elapsedTime;
     float tempTime;
 
+    private GameObject XRRig;
+
+    private bool gameLoopStarted = false;
+
+    private XRSimpleInteractable carInteractable;
+
     // Start is called before the first frame update
     void Start()
     {
         InitDefaultStartingState();
         popupObj.SetActive(false);
+
+        foreach (Transform child in XROrigin.transform)
+        {
+            GameObject childObject = child.gameObject;
+
+            if(childObject.name == "XR Origin (XR Rig)"){
+                XRRig = childObject;
+            }
+        }
+
+        carInteractable = Car.GetComponent<XRSimpleInteractable>();
+
+        if(carInteractable == null){
+            Debug.Log("CAR INTERACTABLE NOT FOUND!");
+        }
     }
 
     void Update()
@@ -46,7 +68,7 @@ public class DrivingDemoManager : MonoBehaviour
         elapsedTime += Time.deltaTime;
         int seconds = Mathf.FloorToInt(elapsedTime % 60);
         int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        //timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         
     }
 
@@ -131,8 +153,10 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     public void Begin()
     {
-        Debug.Log("Started");
-        StartCoroutine(GameLoop());
+        if(gameLoopStarted == false){
+            StartCoroutine(GameLoop());
+            gameLoopStarted = true;
+        }
     }
 
     /// <summary>
@@ -143,8 +167,8 @@ public class DrivingDemoManager : MonoBehaviour
     {
         // Place player within their car
         XROrigin.transform.SetParent(Car.transform, false);
-        XROrigin.transform.position = new Vector3(0, 0, 0);
-        XROrigin.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        XRRig.transform.localPosition = new Vector3(0, 0, 0);
+        XRRig.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, 0));
         XROrigin.transform.localPosition = new Vector3(-0.3f, -0.417f, 0.11f);
         XROrigin.transform.localRotation = Quaternion.Euler(new Vector3(0.0f, -1.314f, 0.0f));
 
