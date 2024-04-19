@@ -16,6 +16,9 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class DrivingDemoManager : MonoBehaviour
 {   
     public GameObject    Car;
+
+    private GameObject    CarDoor;
+
     public SplineAnimate CarAnimator;
     public GameObject    XROrigin;
     public GameObject    PlayerLocomotionSystem;
@@ -57,6 +60,18 @@ public class DrivingDemoManager : MonoBehaviour
             }
         }
 
+        foreach (Transform child in Car.transform)
+        {
+            GameObject childObject = child.gameObject;
+
+            if (childObject.name == "Tocus_Door_Left_Front")
+            {
+                CarDoor = childObject;
+            }
+        }
+
+
+
         carInteractable = Car.GetComponent<XRSimpleInteractable>();
         if(carInteractable == null){
             Debug.Log("CAR INTERACTABLE NOT FOUND!");
@@ -66,11 +81,12 @@ public class DrivingDemoManager : MonoBehaviour
     void Update()
     {
         // Update timer
-        elapsedTime += Time.deltaTime;
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        //timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-        
+        if(gameLoopStarted){
+            elapsedTime += Time.deltaTime;
+            int seconds = Mathf.FloorToInt(elapsedTime % 60);
+            int minutes = Mathf.FloorToInt(elapsedTime / 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
     }
 
     /// <summary>
@@ -173,9 +189,6 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     IEnumerator GameLoop()
     {
-        // Place player within their car
-        enterCar();
-
         // Wait for car driving to finish
         yield return StartCoroutine(CarThread());
 
@@ -260,6 +273,7 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     private void enterCar()
     {
+        Debug.Log("Player entered car");
         PlayerLocomotionSystem.SetActive(false);
         XROrigin.transform.SetParent(Car.transform, false);
         XRRig.transform.localPosition = new Vector3(0, 0, 0);
@@ -275,6 +289,7 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     private void exitCar()
     {
+        Debug.Log("Player left car");
         PlayerLocomotionSystem.SetActive(true);
         XROrigin.transform.SetParent(null);
         Vector3 carOffset = Car.transform.localToWorldMatrix * new Vector4(-1.3f, -0.5f, 0.2f, 0f);
