@@ -11,7 +11,7 @@ using Interpolators = UnityEngine.Splines.Interpolators;
 using Unity.Services.Analytics;
 using UnityEngine.UI;
 using TMPro;
-using XRSimpleInteractable;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class DrivingDemoManager : MonoBehaviour
 {   
@@ -56,7 +56,6 @@ public class DrivingDemoManager : MonoBehaviour
         }
 
         carInteractable = Car.GetComponent<XRSimpleInteractable>();
-
         if(carInteractable == null){
             Debug.Log("CAR INTERACTABLE NOT FOUND!");
         }
