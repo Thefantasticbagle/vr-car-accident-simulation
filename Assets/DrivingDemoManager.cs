@@ -23,6 +23,10 @@ public class DrivingDemoManager : MonoBehaviour
 
     private GameObject    CarDoor;
 
+    public GameObject IncidentCarDoor;
+
+    public GameObject JasonTheVictim;
+
     public SplineAnimate CarAnimator;
     public GameObject    XROrigin;
     public GameObject    PlayerLocomotionSystem;
@@ -81,6 +85,9 @@ public class DrivingDemoManager : MonoBehaviour
         if(carInteractable == null){
             Debug.Log("CAR INTERACTABLE NOT FOUND!");
         }
+
+        //StartCoroutine(GameLoop());
+
     }
 
     void Update()
@@ -105,32 +112,32 @@ public class DrivingDemoManager : MonoBehaviour
             { "HazardLights", new ProtocolItem
             (
                 1,
-                "Turn on hazard lights"
+                "Skru på varsellysene"
             )},
             { "ReflectiveVest", new ProtocolItem
             (
                 1,
-                "Wear the reflective vest"
+                "Ta på refleksvest"
             )},
             { "EmergencyTriangle", new ProtocolItem
             (
                 2,
-                "Place emergency triangle 150-200m away"
+                "Plasser varseltrekanten 150-200m unna skadestedet"
             )},
             { "CallEmergencyServices", new ProtocolItem
             (
                 3,
-                "Call the emergency services"
+                "Ring nødetatene"
             )},
             { "DisableIncidentCar", new ProtocolItem
             (
                 4,
-                "Disable the incident car"
+                "Skru av tenningen på ulykkesbilen"
             )},
             { "HMS", new ProtocolItem
             (
                 5,
-                "Give medical attention to the person"
+                "Gi medisinsk tilsyn veiledet av nødetatene mens de er på vei"
             )}
         };
 
@@ -199,8 +206,7 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     IEnumerator GameLoop()
     {
-        // Wait for car driving to finish
-        yield return StartCoroutine(CarThread());
+        StartCoroutine(ListenForProtocolItemCompletion());
 
         // Start threads
         // Each thread runs independently and writes to the SceneState in order to communicate
@@ -211,7 +217,8 @@ public class DrivingDemoManager : MonoBehaviour
         StartCoroutine(DisableIncidentCarThread());
         StartCoroutine(HMSThread());
 
-        StartCoroutine(ListenForProtocolItemCompletion());
+        // Wait for car driving to finish
+        yield return StartCoroutine(CarThread());
 
         // Wait for end-of-game condition
         while (!SceneState.finishedItems.Contains("HMS")) // For now, the 6th step (HMS) ends the games
@@ -232,6 +239,9 @@ public class DrivingDemoManager : MonoBehaviour
         // (For now, simply make the button glow red and make it uninteractible)
         HazardLightsButtonGlowScript.StartPulsingRed();
         SceneState.CompleteItem("HazardLights");
+
+        XRSimpleInteractable HazardLightsInteractable = HazardLightsButtonGlowScript.gameObject.GetComponent<XRSimpleInteractable>();
+        HazardLightsInteractable.enabled = false;
     }
     IEnumerator HazardLightsThread()
     {
@@ -283,10 +293,17 @@ public class DrivingDemoManager : MonoBehaviour
         yield return null;
     }   
 
+    public void OpenIncidentCarDoor()
+    {
+        IncidentCarDoor.transform.localPosition = new Vector3(-1.738f, 0f, 0.226f);
+        IncidentCarDoor.transform.localRotation = Quaternion.Euler(new Vector3(0f, 95f, 0f));
+    }
+
     IEnumerator HMSThread()
     {
-        yield return new WaitForSeconds(5);
-        SceneState.CompleteItem("HMS");
+        
+        yield return null;
+        //SceneState.CompleteItem("HMS");
     }
 
     /// <summary>

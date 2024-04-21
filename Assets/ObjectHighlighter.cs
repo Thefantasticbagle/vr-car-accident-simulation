@@ -8,12 +8,12 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class ObjectHighlighter : MonoBehaviour
 {
     private XRSimpleInteractable[] interactables;
-    private InputActionReference input;
+    public InputActionReference input;
 
     // Start is called before the first frame update
     void Start()
     {
-        input = GetComponent<InputActionReference>();
+        //input = GetComponent<InputActionReference>();
         if (input == null) Debug.Log("Error: Object Highlighter could not find the Input Action Manager component!");
     }
 
@@ -28,7 +28,7 @@ public class ObjectHighlighter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (input.action.ReadValue<float>() > 0.5f)
+        if (input.action.ReadValue<float>() > 0f)
         {
             Debug.Log("Action button pressed!");
         }
