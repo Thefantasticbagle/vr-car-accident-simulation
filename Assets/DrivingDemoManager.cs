@@ -81,9 +81,6 @@ public class DrivingDemoManager : MonoBehaviour
         if(carInteractable == null){
             Debug.Log("CAR INTERACTABLE NOT FOUND!");
         }
-
-        StartCoroutine(GameLoop());
-
     }
 
     void Update()
