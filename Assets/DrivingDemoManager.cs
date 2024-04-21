@@ -19,6 +19,7 @@ public class DrivingDemoManager : MonoBehaviour
     public GameObject ReflectiveVest;
 
     public GameObject    Car;
+    public AudioClip     CarDrivingClip;
 
     private GameObject    CarDoor;
 
@@ -80,6 +81,9 @@ public class DrivingDemoManager : MonoBehaviour
         if(carInteractable == null){
             Debug.Log("CAR INTERACTABLE NOT FOUND!");
         }
+
+        StartCoroutine(GameLoop());
+
     }
 
     void Update()
@@ -325,13 +329,20 @@ public class DrivingDemoManager : MonoBehaviour
         // Start car animation and disable movement
         enterCar();
         CarAnimator.Play();
+        soundFXSource.PlayOneShot(CarDrivingClip);
 
         // Disable menu cube
         MenuCube.SetActive(false);
 
         // Wait for car to arrive
         while (CarAnimator.NormalizedTime < 1f)
+        {
+            soundFXSource.volume = Mathf.Clamp(1f - Mathf.Pow(CarAnimator.NormalizedTime, 10), 0f, 1f);
             yield return null;
+        }
+
+        soundFXSource.Stop();
+        soundFXSource.volume = 1f;
 
         // Once the car has arrived, allow the player to control again
         carDoorEnabled = true;
