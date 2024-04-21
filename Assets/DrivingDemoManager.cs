@@ -14,7 +14,10 @@ using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class DrivingDemoManager : MonoBehaviour
-{   
+{
+    public GameObject MenuCube;
+    public GameObject ReflectiveVest;
+
     public GameObject    Car;
 
     private GameObject    CarDoor;
@@ -32,6 +35,7 @@ public class DrivingDemoManager : MonoBehaviour
     public AudioSource soundFXSource;
 
     public AudioClip soundFXClip;
+    public AudioClip ZipperClip;
 
     public TMP_Text timerText;
     float elapsedTime;
@@ -102,24 +106,29 @@ public class DrivingDemoManager : MonoBehaviour
                 1,
                 "Turn on hazard lights"
             )},
+            { "ReflectiveVest", new ProtocolItem
+            (
+                1,
+                "Wear the reflective vest"
+            )},
             { "EmergencyTriangle", new ProtocolItem
             (
-                3,
+                2,
                 "Place emergency triangle 150-200m away"
             )},
             { "CallEmergencyServices", new ProtocolItem
             (
-                4,
+                3,
                 "Call the emergency services"
             )},
             { "DisableIncidentCar", new ProtocolItem
             (
-                5,
+                4,
                 "Disable the incident car"
             )},
             { "HMS", new ProtocolItem
             (
-                6,
+                5,
                 "Give medical attention to the person"
             )}
         };
@@ -230,9 +239,20 @@ public class DrivingDemoManager : MonoBehaviour
             yield return null;
     }
 
+    /// <summary>
+    /// Makes the player wear the reflective vest.
+    /// </summary>
+    public void WearReflectiveVest()
+    {
+        ReflectiveVest.SetActive(false);
+        soundFXSource.PlayOneShot(ZipperClip);
+        SceneState.CompleteItem("ReflectiveVest");
+    }
     IEnumerator ReflectiveVestThread()
     {
-        yield return null;
+        // (For now, wait for EnableHazardLights() to close the thread for us)
+        while (SceneState.unfinishedItems.Contains("ReflectiveVest"))
+            yield return null;
     }
 
     IEnumerator EmergencyTriangleThread()
@@ -273,7 +293,6 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     private void enterCar()
     {
-        Debug.Log("Player entered car");
         PlayerLocomotionSystem.SetActive(false);
         XROrigin.transform.SetParent(Car.transform, false);
         XRRig.transform.localPosition = new Vector3(0, 0, 0);
@@ -289,7 +308,6 @@ public class DrivingDemoManager : MonoBehaviour
     /// </summary>
     private void exitCar()
     {
-        Debug.Log("Player left car");
         PlayerLocomotionSystem.SetActive(true);
         XROrigin.transform.SetParent(null);
         Vector3 carOffset = Car.transform.localToWorldMatrix * new Vector4(-1.3f, -0.5f, 0.2f, 0f);
@@ -308,6 +326,10 @@ public class DrivingDemoManager : MonoBehaviour
         enterCar();
         CarAnimator.Play();
 
+        // Disable menu cube
+        MenuCube.SetActive(false);
+
+        // Wait for car to arrive
         while (CarAnimator.NormalizedTime < 1f)
             yield return null;
 
