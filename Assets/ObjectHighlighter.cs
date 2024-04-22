@@ -17,6 +17,7 @@ public class ObjectHighlighter : MonoBehaviour
     private XRSimpleInteractable[]  interactables;
     private XRGrabInteractable[]    grabbables;
     private List<GameObject>        interactableObjectClones = new List<GameObject>();
+    private List<GameObject>        interactableObjectClonesOriginals = new List<GameObject>();
 
     private int highlightButtonHeld = 0;
     private bool objectsHighlighted = false;
@@ -96,6 +97,7 @@ public class ObjectHighlighter : MonoBehaviour
             }
 
             // Finally, add the object to the list of managed clones
+            interactableObjectClonesOriginals.Add(interactableObject);
             interactableObjectClones.Add(interactableObjectClone);
         }
 
@@ -111,6 +113,7 @@ public class ObjectHighlighter : MonoBehaviour
             Destroy(interactableObjectClone);
 
         interactableObjectClones.Clear();
+        interactableObjectClonesOriginals.Clear();
         objectsHighlighted = false;
     }
 
@@ -150,6 +153,21 @@ public class ObjectHighlighter : MonoBehaviour
                     meshRenderer.material.SetColor("_EmissionColor", newColor * Mathf.Clamp(Mathf.SmoothStep(1, 150, distanceToPlayer), 1, 150));
                     foreach (var material in meshRenderer.materials)
                         material.SetColor("_EmissionColor", newColor);
+                }
+            }
+
+            // Also check if highlighted objects originals still have their interactable
+            for (int i = 0; i < interactableObjectClonesOriginals.Count; i++)
+            {
+                GameObject interactableObject = interactableObjectClonesOriginals[i];
+                XRSimpleInteractable interactable = interactableObject.GetComponent<XRSimpleInteractable>();
+                GameObject interactableObjectClone = interactableObjectClones[i];
+                if (!interactable.enabled || interactable == null || !interactableObject.activeSelf)
+                {
+                    interactableObjectClonesOriginals.RemoveAt(i);
+                    interactableObjectClones.RemoveAt(i);
+                    i--;
+                    Destroy(interactableObjectClone);
                 }
             }
         }
