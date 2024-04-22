@@ -21,7 +21,9 @@ public class DrivingDemoManager : MonoBehaviour
     public GameObject    Car;
     public AudioClip     CarDrivingClip;
 
-    private GameObject    CarDoor;
+    public GameObject WarningTriangle;
+    private GameObject baggageRoom;
+    private XRSimpleInteractable baggageRoomInteractable;
 
     public GameObject IncidentCarDoor;
 
@@ -72,14 +74,12 @@ public class DrivingDemoManager : MonoBehaviour
         foreach (Transform child in Car.transform)
         {
             GameObject childObject = child.gameObject;
-
-            if (childObject.name == "Tocus_Door_Left_Front")
+            if (childObject.name == "Tocus_Hood_Back")
             {
-                CarDoor = childObject;
+                baggageRoom = childObject;
+                baggageRoomInteractable = baggageRoom.GetComponent<XRSimpleInteractable>();
             }
         }
-
-
 
         carInteractable = Car.GetComponent<XRSimpleInteractable>();
         if(carInteractable == null){
@@ -122,7 +122,7 @@ public class DrivingDemoManager : MonoBehaviour
             { "EmergencyTriangle", new ProtocolItem
             (
                 2,
-                "Plasser varseltrekanten 150-200m unna skadestedet"
+                "Plasser varseltrekanten ved veien 150-200m unna skadestedet"
             )},
             { "CallEmergencyServices", new ProtocolItem
             (
@@ -215,6 +215,9 @@ public class DrivingDemoManager : MonoBehaviour
         // Wait for car driving to finish
         yield return StartCoroutine(CarThread());
 
+        // Enable baggage room
+        baggageRoomInteractable.enabled = true;
+
         // Wait for end-of-game condition
         while (!SceneState.finishedItems.Contains("HMS")) // For now, the 6th step (HMS) ends the games
             yield return null;
@@ -261,9 +264,23 @@ public class DrivingDemoManager : MonoBehaviour
             yield return null;
     }
 
+    public void OpenBaggageRoom()
+    {
+        baggageRoomInteractable.enabled = false;
+        baggageRoom.transform.localPosition = new Vector3(0f, -1.038f, -2.263f);
+        baggageRoom.transform.localRotation = Quaternion.Euler(new Vector3(91.54999f, 191.17f, 190.709f));
+
+        // When the baggage room is opened, reveal the warning triangle as well
+        WarningTriangle.SetActive(true);
+        Vector3 carOffset = Car.transform.localToWorldMatrix * new Vector3(0.03470612f, 0.3406601f, -2.002366f);
+        Vector3 warningTriangleNewPos = Car.transform.position + carOffset;
+        WarningTriangle.transform.position = warningTriangleNewPos;
+        WarningTriangle.transform.rotation = Quaternion.Euler(new Vector3(73.098f, 1.726f, 0f));
+    }
     IEnumerator EmergencyTriangleThread()
     {
-        yield return null;
+        while (SceneState.unfinishedItems.Contains("EmergencyTriangle"))
+            yield return null;
     }
 
     /// <summary>
