@@ -159,18 +159,13 @@ public class DrivingDemoManager : MonoBehaviour
                 string lastItemName = SceneState.finishedItems[^1];
                 ProtocolItem lastItem = SceneState.allItems[lastItemName];
 
-                Debug.Log("COMPLETED NEW OBJECTIVE: " + lastItemName + " " + lastItem.description);
-
-                
                 // Set popup-text and show it
-                popupTextField.text = "Completed: " + lastItem.description;
+                popupTextField.text = "Utført: " + lastItem.description;
                 
                 popupObj.SetActive(true);
                 soundFXSource.PlayOneShot(soundFXClip);
                 yield return (new WaitForSeconds(6));
                 popupObj.SetActive(false);
-                /**                
-                */
 
                 oldCompletedCount = SceneState.finishedItems.Count;
             } else {
@@ -299,11 +294,14 @@ public class DrivingDemoManager : MonoBehaviour
         IncidentCarDoor.transform.localRotation = Quaternion.Euler(new Vector3(0f, 95f, 0f));
     }
 
+    public void InitiateHMS()
+    {
+        SceneState.CompleteItem("HMS");
+    }
     IEnumerator HMSThread()
     {
-        
-        yield return null;
-        //SceneState.CompleteItem("HMS");
+        while (SceneState.unfinishedItems.Contains("HMS"))
+            yield return null;
     }
 
     /// <summary>
