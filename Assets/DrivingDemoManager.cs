@@ -54,8 +54,6 @@ public class DrivingDemoManager : MonoBehaviour
     private bool insideCar = false;
     private bool carDoorEnabled = true;
 
-    private XRSimpleInteractable carInteractable;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -80,14 +78,6 @@ public class DrivingDemoManager : MonoBehaviour
                 baggageRoomInteractable = baggageRoom.GetComponent<XRSimpleInteractable>();
             }
         }
-
-        carInteractable = Car.GetComponent<XRSimpleInteractable>();
-        if(carInteractable == null){
-            Debug.Log("CAR INTERACTABLE NOT FOUND!");
-        }
-
-        //StartCoroutine(GameLoop());
-
     }
 
     void Update()
