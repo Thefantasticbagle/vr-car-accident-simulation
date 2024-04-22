@@ -39,6 +39,12 @@ public class DrivingDemoManager : MonoBehaviour
 
     public GameObject    popupObj;
 
+    public GameObject popupBackgroundOutline;
+
+    public GameObject gameCompletionSummaryObj;
+
+    public TMP_Text gameCompletionTextField;
+
     public AudioSource soundFXSource;
 
     public AudioClip soundFXClip;
@@ -59,6 +65,8 @@ public class DrivingDemoManager : MonoBehaviour
     {
         InitDefaultStartingState();
         popupObj.SetActive(false);
+
+        gameCompletionSummaryObj.SetActive(false);
 
         foreach (Transform child in XROrigin.transform)
         {
@@ -122,7 +130,7 @@ public class DrivingDemoManager : MonoBehaviour
             { "DisableIncidentCar", new ProtocolItem
             (
                 4,
-                "Skru av tenningen på ulykkesbilen"
+                "Skru av tenningen på ulykkesbilen [IKKE IMPLEMENTERT ENDA]"
             )},
             { "HMS", new ProtocolItem
             (
@@ -154,7 +162,7 @@ public class DrivingDemoManager : MonoBehaviour
                 
                 popupObj.SetActive(true);
                 soundFXSource.PlayOneShot(soundFXClip);
-                yield return (new WaitForSeconds(6));
+                yield return (new WaitForSeconds(4));
                 popupObj.SetActive(false);
 
                 oldCompletedCount = SceneState.finishedItems.Count;
@@ -214,6 +222,51 @@ public class DrivingDemoManager : MonoBehaviour
 
         // End of game.
         Debug.Log("Game complete!");
+        GameComplete();
+        
+    }
+
+    public void GameComplete()
+    {
+        //foreach (var it in SceneState.allItems.Keys)
+        //    SceneState.unfinishedItems.Add(it);
+
+        string summaryString = 
+            "Gratulerer! Du har akkurat fullført en ulykkessimulering. Her er slik du valgte å håndtere situasjonen:\n\n";
+
+        int index = 0;
+
+        foreach (var itemKey in SceneState.finishedItems){
+            index += 1;
+
+            ProtocolItem item = SceneState.allItems[itemKey];
+            summaryString += "\n [" + index + "] " + item.description;
+        }
+
+        summaryString += "\n\n Du manglet de følgende oppgavene:\n";
+
+        foreach (var itemKey in SceneState.unfinishedItems)
+        {
+            ProtocolItem item = SceneState.allItems[itemKey];
+            summaryString += "\n [ ] " + item.description;
+        }
+
+        summaryString += "\n\n En ideell håndtering av situasjonen foregår som følger:\n\n" +
+        "[1] Du senker farten og parkerer bilen i god avstand fra ulykken (slik at nødetatene kommer til)\n" +
+        "[2] Slår på nødblink på egen bil\n" +
+        "[3] På med refleksvest som du henter i hanskerommet\n" +
+        "[4] Gå ut av bilen og hent varseltrekant i bagasjerommmet\n" +
+        "[5] Plasser den 150 - 200 meter bak\n" +
+        "[6] Skadestedet er nå sikret\n" +
+        "[7] Varsle nødetatene, ring 113\n" +
+        "[8] Skru av tenningen på ulykkesbilen og hindre at noen røyker i området\n" +
+        "[9] Hjelpe pasienten, sikre frie luftveier, stoppe ytre blødninger (presse hardt der det blør), sørg for å holde pasienten varm (pakk de inn)\n" +
+        "\n\n NB! Merk at det ikke er komplett overlapp mellom slik ettersom simuleringen ikke enda er komplett.";
+
+        popupBackgroundOutline.SetActive(false);
+
+        gameCompletionTextField.text = summaryString;
+        gameCompletionSummaryObj.SetActive(true);
     }
 
     /// <summary>
